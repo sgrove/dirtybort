@@ -1,4 +1,11 @@
 #############################################################
+#	Misc. Settings
+#############################################################
+
+set :spinner_user, nil
+set :runner, "libai"
+
+#############################################################
 #	Application
 #############################################################
 
@@ -17,6 +24,7 @@ set :use_sudo, true
 #############################################################
 
 set :user, "libai"
+set :password, "m!ingyue"
 set :domain, "chuwe.com"
 server domain, :app, :web
 role :db, domain, :primary => true
@@ -29,7 +37,7 @@ set :scm, :git
 set :deploy_via, :remote_cache
 ssh_options[:paranoid] = false
 
-set :repository, "git@github.com:sgove/coala.git"
+set :repository, "git@github.com:sgrove/coala.git"
 set :scm_username, "sgrove"
 set :scm_branch,    "master "
 
