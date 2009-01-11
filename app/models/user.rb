@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   
   # Relationships
   has_and_belongs_to_many :roles
+  has_one :profile
 
   # HACK HACK HACK -- how to do attr_accessible from here?
   # prevents a user from submitting a crafted form that bypasses activation
@@ -61,5 +62,5 @@ class User < ActiveRecord::Base
     self.identity_url = OpenIdAuthentication.normalize_url(identity_url) unless not_using_openid?
   rescue URI::InvalidURIError
     errors.add_to_base("Invalid OpenID URL")
-  end
+  end  
 end

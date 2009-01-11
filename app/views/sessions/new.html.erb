@@ -1,4 +1,8 @@
 <%= title "Login", :h2 %>
+<% if logged_in? %>
+  Well done, <%= edit_profile_path(current_user.profile) %>
+<% end %>
+
 <% form_tag session_path do %>
 	<fieldset>
 		<legend>Your Details</legend>
@@ -17,15 +21,17 @@
 			</li>
 		</ol>
 	</fieldset>
-	<fieldset>
-		<legend>Login with OpenID</legend>
-		<ol>
-			<li>
-				<%= label_tag 'openid_url', 'OpenID URL' %>
-				<%= text_field_tag 'openid_url' %>
-			</li>
-		</ol>
-	</fieldset>
+	<% if openid_enabled? %>
+  <fieldset>
+    <legend>Login with OpenID</legend>
+    <ol>
+      <li>
+        <%= label_tag 'openid_url', 'OpenID URL' %>
+        <%= text_field_tag 'openid_url' %>
+      </li>
+    </ol>
+  </fieldset>
+  <% end %>
 	<div class="buttons">
 		<%= submit_tag 'Login' %>
 		<%= link_to 'Forgotten Password', forgot_password_path %>

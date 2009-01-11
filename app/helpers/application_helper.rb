@@ -17,4 +17,11 @@ module ApplicationHelper
     messages
   end
   
+  # 
+  # Check to see if we've enabled openid on our site
+  # 
+  def openid_enabled?
+    enabled ||= APP_CONFIG[:openid_enabled]
+  end
+  
 end

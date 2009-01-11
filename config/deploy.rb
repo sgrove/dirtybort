@@ -1,37 +1,47 @@
-set :stages, %w(staging production)
-set :default_stage, "production"
-require File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems/capistrano-ext-1.2.1/lib/capistrano/ext/multistage")
+#############################################################
+#	Application
+#############################################################
 
+set :application, "coala"
+set :deploy_to, "/u/apps/#{application}"
 
-namespace :db do
-  desc 'Dumps the production database to db/production_data.sql on the remote server'
-  task :remote_db_dump, :roles => :db, :only => { :primary => true } do
-    run "cd #{deploy_to}/#{current_dir} && " +
-      "rake RAILS_ENV=#{rails_env} db:database_dump --trace" 
-  end
+#############################################################
+#	Settings
+#############################################################
 
-  desc 'Downloads db/production_data.sql from the remote production environment to your local machine'
-  task :remote_db_download, :roles => :db, :only => { :primary => true } do  
-    execute_on_servers(options) do |servers|
-      self.sessions[servers.first].sftp.connect do |tsftp|
-        tsftp.download!("#{deploy_to}/#{current_dir}/db/production_data.sql", "db/production_data.sql")
-      end
-    end
-  end
+default_run_options[:pty] = true
+set :use_sudo, true
 
-  desc 'Cleans up data dump file'
-  task :remote_db_cleanup, :roles => :db, :only => { :primary => true } do
-    execute_on_servers(options) do |servers|
-      self.sessions[servers.first].sftp.connect do |tsftp|
-        tsftp.remove! "#{deploy_to}/#{current_dir}/db/production_data.sql" 
-      end
-    end
-  end 
+#############################################################
+#	Servers
+#############################################################
 
-  desc 'Dumps, downloads and then cleans up the production data dump'
-  task :remote_db_runner do
-    remote_db_dump
-    remote_db_download
-    remote_db_cleanup
+set :user, "libai"
+set :domain, "chuwe.com"
+server domain, :app, :web
+role :db, domain, :primary => true
+
+#############################################################
+#	Git
+#############################################################
+
+set :scm, :git
+set :deploy_via, :remote_cache
+ssh_options[:paranoid] = false
+
+set :repository, "git@github.com:sgove/coala.git"
+set :scm_username, "sgrove"
+set :scm_branch,    "master "
+
+#############################################################
+#	Passenger
+#############################################################
+
+namespace :passenger do
+  desc "Restart Application"
+  task :restart do
+    run "touch #{current_path}/tmp/restart.txt"
   end
 end
+
+after :deploy, "passenger:restart"

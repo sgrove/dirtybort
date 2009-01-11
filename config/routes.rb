@@ -10,6 +10,9 @@ ActionController::Routing::Routes.draw do |map|
   map.open_id_complete '/opensession', :controller => "sessions", :action => "create", :requirements => { :method => :get }
   map.open_id_create '/opencreate', :controller => "users", :action => "create", :requirements => { :method => :get }
   
+  # Profile paths
+  map.edit_profile '/profile/edit', :controller => 'profile', :action => 'edit'
+  
   # Restful Authentication Resources
   map.resources :users
   map.resources :passwords

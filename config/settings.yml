@@ -1,7 +1,8 @@
 development: &non_production_settings
   site_url: http://localhost:3000
-  site_name: Bort
-  admin_email: bort@bort.com
+  site_name: niqo
+  admin_email: sean@niqo.co.ru
+  openid_enabled: false
   
 test:
   <<: *non_production_settings

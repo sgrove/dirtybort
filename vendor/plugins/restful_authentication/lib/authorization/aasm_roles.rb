@@ -62,6 +62,9 @@ module Authorization
         @activated = true
         self.activated_at = Time.now.utc
         self.deleted_at = self.activation_code = nil
+        self.profile = Profile.new()
+        self.profile.user_id = self.id
+        self.profile.save
       end
     end # instance methods
   end
